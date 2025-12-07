@@ -1,12 +1,5 @@
-import { Button } from "antd";
+import HomePage from "./(main)/page";
 
 export default function Home() {
-  return (
-    <div>
-      Hello world
-      <div>
-        <Button type="primary">Click</Button>
-      </div>
-    </div>
-  );
+  return <HomePage />;
 }
