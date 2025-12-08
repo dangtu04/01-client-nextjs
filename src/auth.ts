@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         });
 
-        // console.log(">>> check res >>>: ", res);
+        // console.log(">>> check res: ", res);
         if (res.statusCode === 200) {
           return {
             _id: res.data?.user?._id,

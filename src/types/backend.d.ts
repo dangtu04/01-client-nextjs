@@ -28,6 +28,7 @@ declare global {
     };
     result: T[];
   }
+  
   interface ILogin {
     user: {
       _id: string;
