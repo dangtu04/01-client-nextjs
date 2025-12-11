@@ -34,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (res.statusCode === 401) {
           throw new InvalidEmailPasswordError();
-        } else if (res.statusCode === 400) {
+        } else if (res.statusCode === 403) {
           throw new AccountNotActived();
         } else {
           throw new Error("Internal server error");

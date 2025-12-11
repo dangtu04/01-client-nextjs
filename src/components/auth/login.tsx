@@ -13,23 +13,34 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { authenticate } from "@/utils/actions";
 import { useRouter } from "next/navigation";
+import ModalReactivate from "./modal.reactivate";
+import { useState } from "react";
+import ModalChangePassword from "./modal.change.password";
 const Login = () => {
   const router = useRouter();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [changePassword, setChangePassword] = useState(false);
 
   const onFinish = async (values: any) => {
     const { email, password } = values;
     const res = await authenticate(email, password);
+    console.log(">>> check res: ", res);
     if (res?.error) {
       if (res?.errCode === 1) {
         notification.error({
           message: "Đăng nhập không thành công",
-          description: "Email/mật khẩu không hợp lệ!",
+          description: res?.error,
         });
       } else if (res?.errCode === 2) {
-        notification.error({
-          message: "Đăng nhập không thành công",
-          description: "Tài khoản chưa được kích hoạt!",
-        });
+        // notification.error({
+        //   message: "Đăng nhập không thành công",
+        //   description: "Tài khoản chưa được kích hoạt!",
+        // });
+        setUserEmail(email);
+        setIsModalOpen(true);
+        return;
       }
     } else {
       message.success("Đăng nhập thành công!");
@@ -91,7 +102,9 @@ const Login = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Button type="link">Quên mật khẩu?</Button>
+                  <Button type="link" onClick={() => setChangePassword(true)}>
+                    Quên mật khẩu?
+                  </Button>
                   <Button type="primary" htmlType="submit">
                     Đăng nhập
                   </Button>
@@ -103,12 +116,20 @@ const Login = () => {
             </Link>
             <Divider />
             <div style={{ textAlign: "center" }}>
-              Chưa có tài khoản?{" "}
-              <Link href={"/register"}>Đăng ký tại đây</Link>
+              Chưa có tài khoản? <Link href={"/register"}>Đăng ký tại đây</Link>
             </div>
           </fieldset>
         </Col>
       </Row>
+      <ModalReactivate
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        email={userEmail}
+      />
+      <ModalChangePassword
+        isModalOpen={changePassword}
+        setIsModalOpen={setChangePassword}
+      />
     </>
   );
 };
