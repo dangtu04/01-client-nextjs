@@ -4,6 +4,7 @@ import Menu from "antd/es/menu";
 import {
   AppstoreOutlined,
   MailOutlined,
+  ProductOutlined,
   SettingOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -25,13 +26,18 @@ const AdminSideBar = () => {
       children: [
         {
           key: "dashboard",
-          label: <Link href={"/admin"}>Dashboard</Link>,
+          label: <Link href={"/admin"}>Bảng điều khiển</Link>,
           icon: <AppstoreOutlined />,
         },
         {
           key: "users",
-          label: <Link href={"/admin/user"}>Manage Users</Link>,
+          label: <Link href={"/admin/user"}>Quản lý người dùng</Link>,
           icon: <TeamOutlined />,
+        },
+         {
+          key: "products",
+          label: <Link href={"/admin/product"}>Quản lý sản phẩm</Link>,
+          icon: <ProductOutlined />,
         },
         {
           key: "sub1",

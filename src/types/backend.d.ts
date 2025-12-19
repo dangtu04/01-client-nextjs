@@ -2,6 +2,7 @@ export {};
 // https://bobbyhadz.com/blog/typescript-make-types-global#declare-global-types-in-typescript
 
 declare global {
+  
   interface IRequest {
     url: string;
     method: string;
@@ -24,9 +25,9 @@ declare global {
       current: number;
       pageSize: number;
       pages: number;
-      total: number;
+      totals: number;
     };
-    result: T[];
+    results: T[];
   }
   
   interface ILogin {

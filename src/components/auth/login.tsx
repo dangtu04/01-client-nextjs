@@ -26,7 +26,7 @@ const Login = () => {
   const onFinish = async (values: any) => {
     const { email, password } = values;
     const res = await authenticate(email, password);
-    console.log(">>> check res: ", res);
+    // console.log(">>> check res: ", res);
     if (res?.error) {
       if (res?.errCode === 1) {
         notification.error({

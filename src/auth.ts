@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AccountNotActived, InvalidEmailPasswordError } from "./utils/error";
 import { sendRequest } from "./utils/api";
-import { IUser } from "./types/next-auth";
+import { IAuthUser } from "./types/models/user.model";
 import { UserRole } from "./utils/roles";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -66,12 +66,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!Object.values(UserRole).includes(userRole as UserRole)) {
           throw new Error("Invalid role from backend");
         }
-        token.user = user as IUser;
+        token.user = user as IAuthUser;
       }
       return token;
     },
     session({ session, token }) {
-      (session.user as IUser) = token.user;
+      (session.user as IAuthUser) = token.user;
       return session;
     },
     // authorized: async ({ auth }) => {
