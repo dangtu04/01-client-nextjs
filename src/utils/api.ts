@@ -46,7 +46,6 @@ export const sendAuthRequest = async <T>(
   props: Omit<IRequest, "headers"> & { headers?: Record<string, string> }
 ) => {
   const session = await auth();
-  console.log(">>> check call api")
   return sendRequest<T>({
     ...props,
     headers: {

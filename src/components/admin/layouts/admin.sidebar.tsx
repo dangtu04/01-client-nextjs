@@ -6,7 +6,9 @@ import {
   MailOutlined,
   ProductOutlined,
   SettingOutlined,
+  ShopOutlined,
   TeamOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import React, { useContext } from "react";
 import { AdminContext } from "@/app/library/admin.context";
@@ -31,12 +33,22 @@ const AdminSideBar = () => {
         },
         {
           key: "users",
-          label: <Link href={"/admin/user"}>Quản lý người dùng</Link>,
+          label: <Link href={"/admin/user"}>Người dùng</Link>,
           icon: <TeamOutlined />,
         },
-         {
+        {
+          key: "categories",
+          label: <Link href={"/admin/category"}>Danh mục</Link>,
+          icon: <UnorderedListOutlined />,
+        },
+        {
+          key: "brands",
+          label: <Link href={"/admin/brand"}>Thương hiệu</Link>,
+          icon: <ShopOutlined />,
+        },
+        {
           key: "products",
-          label: <Link href={"/admin/product"}>Quản lý sản phẩm</Link>,
+          label: <Link href={"/admin/product"}>Sản phẩm</Link>,
           icon: <ProductOutlined />,
         },
         {

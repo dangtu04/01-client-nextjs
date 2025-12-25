@@ -1,15 +1,15 @@
 "use client";
-import { IUserTable } from "@/types/models/user.model";
+
 import { Button, Popconfirm, Table } from "antd";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import UserCreate from "./user.create";
-import { handleDeleteUserAction } from "@/actions/users.actions";
-import UserUpdate from "./user.update";
-
+import BrandCreate from "./brand.create";
+import BrandUpdate from "./brand.update";
+import { IBrandTable } from "@/types/models/brand.model";
+import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
+import { handleDeleteBrandAction } from "@/actions/brands.actions";
 interface IProps {
-  users: IUserTable[];
+  brands: IBrandTable[];
   meta?: {
     current: number;
     pageSize: number;
@@ -18,9 +18,8 @@ interface IProps {
   };
 }
 
-const UserTable = (props: IProps) => {
-  // console.log(">>> check render UserTable");
-  const { users, meta } = props;
+const BrandTable = (props: IProps) => {
+  const { brands, meta } = props;
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -28,25 +27,17 @@ const UserTable = (props: IProps) => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
   const [dataUpdate, setDataUpdate] = useState<any>(null);
 
-  //   console.log(">>> check router: ", router);
-  //   console.log(">>> check searchParams: ", searchParams.toString());
-
   const handlePaginationChange = (page: number, pageSize: number) => {
-    // Tạo URLSearchParams mới từ searchParams hiện tại
     const params = new URLSearchParams(searchParams.toString());
-
-    // Cập nhật current và pageSize
     params.set("current", page.toString());
     params.set("pageSize", pageSize.toString());
-
-    // Navigate với params mới
     router.push(`?${params.toString()}`);
   };
 
   const columns = [
     {
       title: "STT",
-      render: (_: any, __: IUserTable, index: number) => {
+      render: (_: any, __: IBrandTable, index: number) => {
         const current = meta?.current ?? 1;
         const pageSize = meta?.pageSize ?? 10;
         return (current - 1) * pageSize + index + 1;
@@ -58,18 +49,18 @@ const UserTable = (props: IProps) => {
       key: "_id",
     },
     {
-      title: "Tên người dùng",
+      title: "Tên thương hiệu",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: "Slug",
+      dataIndex: "slug",
+      key: "slug",
     },
     {
       title: "Hành động",
-      render: (text: any, record: any, index: any) => {
+      render: (text: any, record: any) => {
         return (
           <>
             <EditTwoTone
@@ -80,12 +71,11 @@ const UserTable = (props: IProps) => {
                 setDataUpdate(record);
               }}
             />
-
-            <Popconfirm
+             <Popconfirm
               placement="leftTop"
-              title={"Xác nhận xóa người dùng"}
-              description={"Bạn có chắc chắn muốn xóa người dùng này ?"}
-              onConfirm={async () => await handleDeleteUserAction(record?._id)}
+              title={"Xác nhận xóa thương hiệu"}
+              description={"Bạn có chắc chắn muốn xóa thương hiệu này ?"}
+              onConfirm={async () => await handleDeleteBrandAction(record?._id)}
               okText="Xác nhận"
               cancelText="Hủy"
             >
@@ -101,7 +91,7 @@ const UserTable = (props: IProps) => {
 
   return (
     <>
-      <div
+     <div
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -109,15 +99,15 @@ const UserTable = (props: IProps) => {
           marginBottom: 20,
         }}
       >
-        <span>QUẢN LÝ NGƯỜI DÙNG</span>
+        <span>QUẢN LÝ THƯƠNG HIỆU</span>
         <Button type="primary" onClick={() => setIsCreateModalOpen(true)}>
-          Thêm mới người dùng
+          Thêm mới thương hiệu
         </Button>
       </div>
       <Table
         rowKey={"_id"}
         bordered
-        dataSource={users}
+        dataSource={brands}
         columns={columns}
         pagination={{
           current: meta?.current,
@@ -125,17 +115,15 @@ const UserTable = (props: IProps) => {
           total: meta?.totals,
           showSizeChanger: true,
           pageSizeOptions: ["5", "10", "20", "50"],
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} of ${total} items`,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
           onChange: handlePaginationChange,
         }}
       />
-      <UserCreate
+      <BrandCreate
         isCreateModalOpen={isCreateModalOpen}
         setIsCreateModalOpen={setIsCreateModalOpen}
       />
-
-      <UserUpdate
+      <BrandUpdate
         isUpdateModalOpen={isUpdateModalOpen}
         setIsUpdateModalOpen={setIsUpdateModalOpen}
         dataUpdate={dataUpdate}
@@ -145,4 +133,4 @@ const UserTable = (props: IProps) => {
   );
 };
 
-export default UserTable;
+export default BrandTable;

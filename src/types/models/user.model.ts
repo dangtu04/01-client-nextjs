@@ -1,9 +1,11 @@
+import { UserRole } from "@/utils/roles";
+
 // Core user info
 export interface IUser {
   _id: string;
   email: string;
   name: string;
-  role: string;
+  role: UserRole;
 }
 
 // User info cho auth/session
@@ -28,12 +30,13 @@ export interface ICreateUserDTO {
   name: string;
   email: string;
   password: string;
-  role?: string;
+  role?: UserRole;
 }
 
 export interface IUpdateUserDTO {
   name?: string;
-  email?: string;
-  role?: string;
+  phone?: string;
+  address?: string;
+  role?: UserRole;
   isActive?: boolean;
 }
