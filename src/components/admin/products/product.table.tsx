@@ -1,13 +1,19 @@
 "use client";
 
 import { IProductTable } from "@/types/models/product.model";
-import { Button, Table, Tag, Image, Space } from "antd";
+import { Button, Table, Tag, Image, Space, Popconfirm } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   EyeOutlined,
   DeleteOutlined,
+  DeleteTwoTone,
+  EditTwoTone,
 } from "@ant-design/icons";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { handleDeleteProductAction } from "@/actions/products.actions";
+
+const nullImage = "/null-product.png";
 
 interface IProps {
   products: IProductTable[];
@@ -53,7 +59,7 @@ const ProductTable = (props: IProps) => {
       width: 100,
       render: (thumbnail) => (
         <Image
-          src={thumbnail?.secureUrl}
+          src={thumbnail?.secureUrl || nullImage}
           alt="thumbnail"
           width={60}
           height={60}
@@ -103,15 +109,23 @@ const ProductTable = (props: IProps) => {
       width: 120,
       render: (_, record) => (
         <Space>
-          <Button
-            type="text"
-            icon={<EyeOutlined />}
-          />
-          <Button
-            type="text"
-            danger
-            icon={<DeleteOutlined />}
-          />
+          <Link href={`/admin/product/${record._id}`}>
+            <EditTwoTone
+              style={{ cursor: "pointer", margin: "0 20px", fontSize: 16 }}
+            />
+          </Link>
+          <Popconfirm
+            placement="leftTop"
+            title={"Xác nhận xóa sản phẩm"}
+            description={"Bạn có chắc chắn muốn xóa sản phẩm này ?"}
+            onConfirm={async () => await handleDeleteProductAction(record?._id)}
+            okText="Xác nhận"
+            cancelText="Hủy"
+          >
+            <span style={{ cursor: "pointer", fontSize: 16 }}>
+              <DeleteTwoTone twoToneColor="#ff4d4f" />
+            </span>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -128,10 +142,10 @@ const ProductTable = (props: IProps) => {
           marginBottom: 20,
         }}
       >
-        <span style={{ fontSize: 18, fontWeight: 600 }}>
-          QUẢN LÝ SẢN PHẨM
-        </span>
-        <Button type="primary">Thêm mới sản phẩm</Button>
+        <span style={{ fontSize: 18, fontWeight: 600 }}>QUẢN LÝ SẢN PHẨM</span>
+        <Button type="primary">
+          <Link href="/admin/product/create">Thêm mới sản phẩm</Link>
+        </Button>
       </div>
 
       {/* Table */}

@@ -3,15 +3,25 @@ interface IThumbnail {
   secureUrl: string;
 }
 
-interface ICategory {
+export interface ICategory {
   _id: string;
   name: string;
 }
 
-interface IBrand {
+export interface IBrand {
   _id: string;
   name: string;
 }
+
+export interface ISize {
+  _id: string;
+  name: string;
+}
+
+export interface ISelectResponse<T> {
+  results: T[];
+}
+
 
 export interface IProductVariant {
   sizeId: string;
@@ -39,4 +49,14 @@ export interface IProductDetail extends IProductTable {
   createdAt: string;
   updatedAt: string;
   __v?: number;
+}
+
+export interface IProductCreate {
+  name: string;
+  description?: string;
+  price: number;
+  categoryIds: string[];
+  brandId: string;
+  material?: string;
+  thumbnail?: File;
 }
