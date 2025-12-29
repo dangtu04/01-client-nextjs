@@ -8,6 +8,7 @@ import {
   DeleteOutlined,
   DeleteTwoTone,
   EditTwoTone,
+  PictureOutlined,
 } from "@ant-design/icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -106,9 +107,15 @@ const ProductTable = (props: IProps) => {
     {
       title: "Hành động",
       key: "action",
-      width: 120,
+      // width: 120,
       render: (_, record) => (
         <Space>
+          <Link href={`/admin/product/${record._id}/images`}>
+            <PictureOutlined
+              style={{ cursor: "pointer", margin: "0 20px", fontSize: 16 }}
+            />
+          </Link>
+
           <Link href={`/admin/product/${record._id}`}>
             <EditTwoTone
               style={{ cursor: "pointer", margin: "0 20px", fontSize: 16 }}

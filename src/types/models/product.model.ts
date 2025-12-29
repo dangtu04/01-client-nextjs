@@ -22,7 +22,6 @@ export interface ISelectResponse<T> {
   results: T[];
 }
 
-
 export interface IProductVariant {
   sizeId: string;
   sizeCode?: string;
@@ -59,4 +58,15 @@ export interface IProductCreate {
   brandId: string;
   material?: string;
   thumbnail?: File;
+}
+
+
+export interface IProductImage { 
+  _id: string;
+  publicId: string;
+  secureUrl: string;
+}
+
+export interface IProductImageResponse {
+  results: IProductImage[];
 }

@@ -1,5 +1,4 @@
 import ProductDetail from "@/components/admin/products/product.detail";
-import { ICategoryParent } from "@/types/models/category.model";
 import {
   IBrand,
   ICategory,
