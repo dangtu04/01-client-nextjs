@@ -1,0 +1,192 @@
+// Variables
+$primary-color: #2563eb;
+$hover-bg: #f3f4f6;
+$text-color: #333;
+$border-color: #e5e7eb;
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Main menu container
+.customer-menu {
+  background: #fff;
+  border-bottom: 1px solid $border-color;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1000;
+
+  ul {
+    list-style: none;
+  }
+
+  a {
+    text-decoration: none;
+    color: $text-color;
+    display: block;
+    transition: $transition;
+  }
+}
+
+// Menu cấp 1 (ngang)
+.menu-level-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+
+  .menu-item {
+    position: relative;
+
+    .menu-link {
+      padding: 16px 24px;
+      font-weight: 500;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+
+      .arrow {
+        font-size: 10px;
+        transition: $transition;
+      }
+
+      &:hover {
+        color: $primary-color;
+        background: $hover-bg;
+
+        .arrow {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}
+
+// Menu cấp 2 (dropdown dọc)
+.menu-level-2 {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 220px;
+  box-shadow: $shadow;
+  border-radius: 4px;
+  padding: 8px 0;
+  animation: fadeIn 0.2s ease;
+
+  .submenu-item {
+    position: relative;
+
+    .submenu-link {
+      padding: 12px 20px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .arrow {
+        font-size: 10px;
+        opacity: 0.6;
+      }
+
+      &:hover {
+        background: $hover-bg;
+        color: $primary-color;
+        padding-left: 24px;
+      }
+    }
+  }
+}
+
+// Menu cấp 3 (dropdown dọc bên phải)
+.menu-level-3 {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: #fff;
+  min-width: 200px;
+  box-shadow: $shadow;
+  border-radius: 4px;
+  padding: 8px 0;
+  margin-left: 2px;
+  animation: slideIn 0.2s ease;
+
+  .submenu-item-3 {
+    .submenu-link-3 {
+      padding: 10px 20px;
+      font-size: 14px;
+
+      &:hover {
+        background: $hover-bg;
+        color: $primary-color;
+        padding-left: 24px;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Responsive
+
+@media (max-width: 1024px) {
+  .customer-menu {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .menu-level-1 {
+    flex-direction: column;
+    align-items: stretch;
+
+    .menu-item {
+      .menu-link {
+        padding: 14px 20px;
+        border-bottom: 1px solid $border-color;
+      }
+    }
+  }
+
+  .menu-level-2 {
+    position: static;
+    box-shadow: none;
+    border-left: 3px solid $primary-color;
+    margin-left: 20px;
+  }
+
+  .menu-level-3 {
+    position: static;
+    box-shadow: none;
+    border-left: 3px solid lighten($primary-color, 20%);
+    margin-left: 20px;
+  }
+}
