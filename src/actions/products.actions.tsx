@@ -1,8 +1,8 @@
 "use server";
 
 import { auth } from "@/auth";
-import { IProductVariant } from "@/types/models/product.model";
-import { sendAuthRequest, sendRequestFile } from "@/utils/api";
+import { IProductCard, IProductVariant } from "@/types/models/product.model";
+import { sendAuthRequest, sendRequest, sendRequestFile } from "@/utils/api";
 import { revalidateTag } from "next/cache";
 
 export const handleCreateProductAction = async (formData: FormData) => {
@@ -95,5 +95,20 @@ export const handleBulkUpdateImagesAction = async (
   });
 
   revalidateTag("list-products");
+  return res;
+};
+
+export const handleGetNewProductsAction = async (
+  current: number,
+  pageSize: number
+) => {
+  const res = await sendRequest<IBackendRes<IModelPaginate<IProductCard>>>({
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/products/list/new`,
+    method: "GET",
+    queryParams: { current, pageSize },
+    nextOption: {
+      next: { tags: ["list-products"], revalidate: 3600 },
+    },
+  });
   return res;
 };

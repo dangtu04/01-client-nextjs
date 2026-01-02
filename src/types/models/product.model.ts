@@ -1,3 +1,9 @@
+export enum ProductStatus {
+  Active = "active",
+  Inactive = "inactive",
+  Draft = "draft",
+}
+
 interface IThumbnail {
   publicId: string;
   secureUrl: string;
@@ -60,8 +66,7 @@ export interface IProductCreate {
   thumbnail?: File;
 }
 
-
-export interface IProductImage { 
+export interface IProductImage {
   _id: string;
   publicId: string;
   secureUrl: string;
@@ -69,4 +74,12 @@ export interface IProductImage {
 
 export interface IProductImageResponse {
   results: IProductImage[];
+}
+
+export interface IProductCard {
+  _id: string;
+  name: string;
+  slug: string;
+  price: number;
+  thumbnail: IThumbnail;
 }

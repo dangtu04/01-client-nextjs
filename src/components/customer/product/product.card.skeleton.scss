@@ -1,0 +1,14 @@
+.product-card.skeleton {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

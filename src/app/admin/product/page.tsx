@@ -10,11 +10,12 @@ interface IProps {
 const ManageProductPage = async (props: IProps) => {
   const current = props?.searchParams?.current ?? 1;
   const pageSize = props?.searchParams?.pageSize ?? 10;
+  const sort = "-createdAt"
 
   const res = await sendAuthRequest<IBackendRes<IModelPaginate<IProductTable>>>({
     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/products`,
     method: "GET",
-    queryParams: { current, pageSize },
+    queryParams: { current, pageSize, sort },
     nextOption: {
       next: { tags: ["list-products"] },
     },

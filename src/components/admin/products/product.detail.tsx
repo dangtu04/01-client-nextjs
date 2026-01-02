@@ -5,6 +5,7 @@ import {
   ICategory,
   IProductDetail,
   ISize,
+  ProductStatus,
 } from "@/types/models/product.model";
 import {
   Button,
@@ -32,7 +33,12 @@ interface IProps {
 const { TextArea } = Input;
 
 const ProductDetail = (props: IProps) => {
-  const { product, listCategoriesForSelect, listBrandsForSelect, listSizesForSelect } = props;
+  const {
+    product,
+    listCategoriesForSelect,
+    listBrandsForSelect,
+    listSizesForSelect,
+  } = props;
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -48,6 +54,7 @@ const ProductDetail = (props: IProps) => {
         categoryIds: product.categoryIds,
         material: product.material,
         description: product.description,
+        status: product.status
       });
 
       // Set ảnh thumbnail hiện có
@@ -115,12 +122,13 @@ const ProductDetail = (props: IProps) => {
       formData.append("name", values.name);
       formData.append("price", values.price.toString());
       formData.append("brandId", values.brandId);
+      formData.append("status", values.status);
 
       // Đảm bảo categoryIds luôn là array
       const categoryIds = Array.isArray(values.categoryIds)
         ? values.categoryIds
         : [values.categoryIds];
-
+      
       // Gửi từng categoryId với key có dạng array: categoryIds[]
       categoryIds.forEach((id: string) => {
         formData.append("categoryIds[]", id);
@@ -176,6 +184,22 @@ const ProductDetail = (props: IProps) => {
                 price: 0,
               }}
             >
+              <Form.Item
+                label="Trạng thái"
+                name="status"
+                rules={[
+                  { required: true, message: "Vui lòng chọn trạng thái" },
+                ]}
+              >
+                <Select
+                  placeholder="Chọn trạng thái"
+                  options={[
+                    { value: ProductStatus.Active, label: "Hoạt động" },
+                    { value: ProductStatus.Inactive, label: "Ngừng hoạt động" },
+                    { value: ProductStatus.Draft, label: "Nháp" },
+                  ]}
+                />
+              </Form.Item>
               <Form.Item
                 label="Tên sản phẩm"
                 name="name"
@@ -316,7 +340,11 @@ const ProductDetail = (props: IProps) => {
               height: "100%",
             }}
           >
-            <ProductVariant listSizesForSelect={listSizesForSelect} productId={product._id} variants={product.variants} />
+            <ProductVariant
+              listSizesForSelect={listSizesForSelect}
+              productId={product._id}
+              variants={product.variants}
+            />
           </div>
         </div>
       </div>
