@@ -44,6 +44,7 @@ const NewProductSection = ({ initialProducts }: IProps) => {
               image={product?.thumbnail?.secureUrl}
               name={product?.name}
               price={product?.price}
+              slug={product?.slug}
             />
           ))}
           {/* hiển thị skeleton khi đang load */}

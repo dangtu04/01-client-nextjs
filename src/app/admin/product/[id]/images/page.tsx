@@ -1,5 +1,5 @@
 import ProductImages from "@/components/admin/products/product.images";
-import { IProductImageResponse } from "@/types/models/product.model";
+import { IProductImage, IProductImageResponse,  } from "@/types/models/product.model";
 import { sendAuthRequest } from "@/utils/api";
 import { notFound } from "next/navigation";
 
@@ -14,12 +14,13 @@ const ProductImagesPage = async ({ params }: IProps) => {
     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/products/${id}/images-detail`,
     method: "GET",
     nextOption: {
-      next: { tags: ["product-images"] },
+      next: { tags: ["detail-images"] },
     },
   });
   if (res?.statusCode === 400) {
     notFound();
   }
+  // console.log(">>> ProductImagesPage res: ", res.data);
 
   return (
     <>

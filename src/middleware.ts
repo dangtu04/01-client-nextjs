@@ -7,7 +7,9 @@ export default auth((req) => {
   const session = req.auth;
 
   const publicRoutes = ["/", "/login", "/register"];
-  const isPublicRoute = publicRoutes.includes(pathname);
+
+  const isProductDetailRoute = pathname.startsWith("/product/");
+  const isPublicRoute = publicRoutes.includes(pathname) || isProductDetailRoute;
   const isAdminRoute = pathname.startsWith("/admin");
 
   // phải login là admin
@@ -18,10 +20,9 @@ export default auth((req) => {
     }
     // login là user, redirect về /
     if (session.user.role !== UserRole.ADMIN) {
-      
       return NextResponse.redirect(new URL("/", req.url));
     }
-    
+
     return NextResponse.next();
   }
 

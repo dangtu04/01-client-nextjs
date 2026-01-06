@@ -44,16 +44,17 @@ export interface IProductTable {
   categoryIds: ICategory[]; // Đã populate
   brandId: IBrand; // Đã populate
   variants: IProductVariant[];
-  status: "active" | "inactive" | "draft";
+  status: ProductStatus[];
 }
 
 export interface IProductDetail extends IProductTable {
   slug: string;
   description: string;
   material: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   __v?: number;
+  images?: string[]
 }
 
 export interface IProductCreate {
