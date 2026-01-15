@@ -82,6 +82,7 @@ import "./header.scss";
 import MenuHorizontal from "./menu.horizontal";
 import { menuData } from "@/utils/menu.data";
 import MenuVertical from "./menu.vertical";
+import Link from "next/link";
 
 const CustomerHeader = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -96,7 +97,7 @@ const CustomerHeader = () => {
     setIsMenuOpen(false);
   };
 
-  const data: any = menuData 
+  const data: any = menuData;
 
   return (
     <>
@@ -137,14 +138,18 @@ const CustomerHeader = () => {
               <span>Tài khoản</span>
             </div>
 
-            <div className="action-item">
+            <Link
+              href={"/cart"}
+              className="action-item"
+              style={{ textDecoration: "none" }}
+            >
               <Badge count={cartItemCount} offset={[5, 0]}>
                 <ShoppingCartOutlined
                   style={{ fontSize: "24px", color: "#fff" }}
                 />
               </Badge>
               <span>Giỏ hàng</span>
-            </div>
+            </Link>
           </div>
         </div>
       </header>
@@ -152,8 +157,7 @@ const CustomerHeader = () => {
       {/* Menu Component */}
       <MenuHorizontal data={data} />
 
-      <MenuVertical data={data} isOpen={isMenuOpen} onClose={closeMenu}
-/>
+      <MenuVertical data={data} isOpen={isMenuOpen} onClose={closeMenu} />
     </>
   );
 };

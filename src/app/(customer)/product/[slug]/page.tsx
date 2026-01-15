@@ -33,7 +33,7 @@ export async function generateMetadata({
   const product = res?.data?.product;
 
   if (!product) {
-    return { title: "Sản phẩm không tồn tại" };
+    return { title: "Sản phẩm không tồn tại" };``
   }
 
   return {

@@ -4,7 +4,7 @@ export enum ProductStatus {
   Draft = "draft",
 }
 
-interface IThumbnail {
+export interface IThumbnail {
   publicId: string;
   secureUrl: string;
 }
@@ -22,6 +22,7 @@ export interface IBrand {
 export interface ISize {
   _id: string;
   name: string;
+  code?: string;
 }
 
 export interface ISelectResponse<T> {

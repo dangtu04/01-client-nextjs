@@ -9,6 +9,8 @@ interface IProps {
 
 const ProductDetail = async ({ product, images }: IProps) => {
   if (!product) return null;
+  console.log('>>>> product: ', product)
+  // console.log(">>>>> product variant: ", product.variants);
 
   // ảnh chính của sản phẩm
   const thumbnail = product?.thumbnail?.secureUrl;
@@ -16,15 +18,17 @@ const ProductDetail = async ({ product, images }: IProps) => {
   // gộp ảnh chính và list ảnh phụ
   const listImagesFinal = [thumbnail, ...(images || [])];
 
+
+  // console.log('>>>>>>> sizes: ', sizes)
+
   // thông tin chi tiết sản phẩm
   const info = {
+    productId: product._id,
     name: product.name,
     categoryName: product.categoryIds?.map((cat) => cat.name) || [],
     brandName: product.brandId?.name || "",
     price: product.price,
-    sizeName: product.variants
-      ?.map((i) => i.sizeName)
-      .filter(Boolean) as string[],
+    variants: product.variants,
     material: product.material,
     description: product.description,
   };

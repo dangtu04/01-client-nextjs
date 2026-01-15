@@ -1,15 +1,15 @@
-"use client";
-
-import { useState } from "react";
+import { IProductVariant } from "@/types/models/product.model";
 import "./product.detail.info.scss";
+import ProductPurchaseOptions from "./product.purchase.options";
 
 interface IProps {
   info: {
+    productId: string;
     name: string;
     categoryName: string[];
     brandName: string;
     price: number;
-    sizeName: string[];
+    variants: IProductVariant[];
     material: string;
     description: string;
   };
@@ -17,33 +17,21 @@ interface IProps {
 
 const ProductDetailInfo = ({ info }: IProps) => {
   const {
+    productId,
     name,
     categoryName,
     brandName,
     price,
-    sizeName,
+    variants,
     material,
     description,
   } = info;
-
-  const [selectedSize, setSelectedSize] = useState(sizeName[0] || "");
-  const [quantity, setQuantity] = useState(1);
-
-  const handleQuantityChange = (action: "increment" | "decrement") => {
-    if (action === "increment") {
-      setQuantity((prev) => prev + 1);
-    } else if (action === "decrement" && quantity > 1) {
-      setQuantity((prev) => prev - 1);
-    }
-  };
+  // console.log("..... variants: ", variants);
 
   return (
     <div className="product-info-container">
       {/* Product Title */}
-      <h1 className="product-title">
-        {name}
-        {/* <span className="stock-badge">Còn Hàng</span> */}
-      </h1>
+      <h1 className="product-title">{name}</h1>
 
       {/* Product Meta */}
       <div className="product-meta">
@@ -61,37 +49,8 @@ const ProductDetailInfo = ({ info }: IProps) => {
         <span className="price">{price.toLocaleString("vi-VN")} ₫</span>
       </div>
 
-      {/* Size Selection */}
-      <div className="selection-group">
-        <div className="size-header">
-          <label>
-            Kích thước: <strong>{selectedSize}</strong>
-          </label>
-          <p className="size-guide">Hướng dẫn chọn size</p>
-        </div>
-        <div className="size-options">
-          {sizeName.map((size) => (
-            <button
-              key={size}
-              className={`size-btn ${selectedSize === size ? "active" : ""}`}
-              onClick={() => setSelectedSize(size)}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Quantity & Add to Cart */}
-      <div className="cart-actions">
-        <div className="quantity-selector">
-          <button onClick={() => handleQuantityChange("decrement")}>-</button>
-          <input type="number" value={quantity} readOnly />
-          <button onClick={() => handleQuantityChange("increment")}>+</button>
-        </div>
-        <button className="add-to-cart-btn">THÊM VÀO GIỎ</button>
-        <button className="buy-now-btn">MUA NGAY</button>
-      </div>
+      {/* Purchase Options */}
+      <ProductPurchaseOptions variants={variants} productId={productId} />
 
       {/* Material Section */}
       {material && (
