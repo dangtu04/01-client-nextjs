@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const Cart = (props: IProps) => {
-  const { items } = props;
+  const { items, meta } = props;
 
   // console.log(">>>>> check props: ", props);
 
@@ -44,7 +44,7 @@ const Cart = (props: IProps) => {
     <div className="cart-page">
       <div className="cart-container">
         <h1 className="cart-title">Giỏ hàng của bạn</h1>
-        <p className="cart-count">{items.length} sản phẩm</p>
+        <p className="cart-count">{meta?.totals} sản phẩm</p>
 
         <div className="cart-content">
     

@@ -7,7 +7,7 @@ import {
 import { CartLimits, ICartItem } from "@/types/models/cart.model";
 import { DeleteOutlined } from "@ant-design/icons";
 import { message } from "antd";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 interface IProps {
   items: ICartItem[];
@@ -18,34 +18,71 @@ const CartItem = (props: IProps) => {
 
   const [cartItems, setCartItems] = useState<ICartItem[]>(items);
 
-  // console.log(">>>> check: ", items);
+  // lưu timeout của itemId
+  const updateTimeouts = useRef<{ [itemId: string]: NodeJS.Timeout }>({});
 
+  // qty cuối cùng của item
+  const latestQuantities = useRef<{ [itemId: string]: number }>({});
+
+  // qty ban đầu của item
+  const originalQuantities = useRef<{ [itemId: string]: number }>({});
+
+  // format giá
   const formatPrice = (price: number) => {
     return price.toLocaleString("vi-VN") + "đ";
   };
 
-  const updateQuantity = async (id: string, change: number) => {
-    let updateQuantity = 1;
+  const updateQuantity = useCallback((id: string, change: number) => {
+    //  cập nhật ui
     setCartItems((items) =>
       items.map((item) => {
         if (item._id === id) {
+          // kiểm tra có phải lần đầu click không
+          if (!(id in originalQuantities.current)) {
+            originalQuantities.current[id] = item.quantity;
+          }
           const newQty = Math.max(1, item.quantity + change);
-          updateQuantity = newQty;
+          latestQuantities.current[id] = newQty;
           return { ...item, quantity: newQty };
         }
         return item;
       })
     );
-    try {
-      const res = await handleUpdateCartItemAction(id, updateQuantity);
-      // console.log('>>>>> check res: ', res)
-      if (res?.statusCode !== 200) {
-        message.error("Cập nhật thất bại");
-      }
-    } catch (error) {
-      console.log('>>>>> error: ', error)
+
+    // nếu đã có timeout trước thì clear đi
+    if (updateTimeouts.current[id]) {
+      clearTimeout(updateTimeouts.current[id]);
     }
-  };
+
+    updateTimeouts.current[id] = setTimeout(async () => {
+      // lưu qty để cập nhật
+      const quantityToUpdate = latestQuantities.current[id];
+      // lưu qty để rollback
+      const oldQuantity = originalQuantities.current[id];
+
+      try {
+        const res = await handleUpdateCartItemAction(id, quantityToUpdate);
+
+        if (res?.statusCode !== 200) {
+          throw new Error(res?.message || "Cập nhật thất bại");
+        }
+        delete originalQuantities.current[id];
+      } catch (error) {
+        console.error("Update error:", error);
+        message.error("Cập nhật thất bại");
+
+        setCartItems((items) =>
+          items.map((item) =>
+            item._id === id ? { ...item, quantity: oldQuantity } : item
+          )
+        );
+        delete originalQuantities.current[id];
+      } finally {
+        delete latestQuantities.current[id];
+        delete updateTimeouts.current[id];
+      }
+    }, 500);
+  }, []);
   const deleteItem = async (itemId: string) => {
     const previousItems = cartItems;
 
