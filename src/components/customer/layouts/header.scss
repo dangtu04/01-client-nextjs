@@ -104,6 +104,16 @@
   display: none;
 }
 
+.ant-dropdown-menu {
+  min-width: 150px;
+}
+
+.ant-dropdown-menu-item {
+  font-size: 14px;
+  padding: 10px 16px;
+}
+
+
 /* ================= TABLET & MOBILE ================= */
 @media (max-width: 1024px) {
   // Ẩn search bar trên tablet/mobile

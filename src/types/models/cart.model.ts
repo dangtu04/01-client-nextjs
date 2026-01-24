@@ -24,4 +24,5 @@ export interface ICartItem {
   sizeId: ISize;
   quantity: number;
   variant: ICartVariant;
+  subtotal: number;
 }

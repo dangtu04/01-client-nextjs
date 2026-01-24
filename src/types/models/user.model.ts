@@ -40,3 +40,26 @@ export interface IUpdateUserDTO {
   role?: UserRole;
   isActive?: boolean;
 }
+
+// interface cho địa chỉ người dùng
+export interface IUserAddress {
+  provinceCode: number;
+  provinceName: string;
+  wardCode: number;
+  wardName: string;
+  detaill: string;
+}
+
+// interface cho profile user
+export interface IProfileUser extends IUser {
+  image: string | null;
+  phone?: string;
+  accountType: "LOCAL" | "GOOGLE" | "GITHUB";
+  isActive: boolean;
+  address?: IUserAddress;
+  codeId?: string;
+  codeExpired?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}

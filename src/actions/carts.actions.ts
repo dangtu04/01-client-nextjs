@@ -15,6 +15,8 @@ export const handleAddtoCartAction = async (
   });
 
   revalidateTag("list-carts");
+  revalidateTag("cart-total");
+
   return res;
 };
 
@@ -25,6 +27,7 @@ export const handleDeleteCartItemAction = async (itemId: string) => {
   });
 
   revalidateTag("list-carts");
+  revalidateTag("cart-total");
   return res;
 };
 

@@ -9,6 +9,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import { useCallback, useRef, useState } from "react";
 
+
 interface IProps {
   items: ICartItem[];
 }
@@ -46,7 +47,7 @@ const CartItem = (props: IProps) => {
           return { ...item, quantity: newQty };
         }
         return item;
-      })
+      }),
     );
 
     // nếu đã có timeout trước thì clear đi
@@ -73,8 +74,8 @@ const CartItem = (props: IProps) => {
 
         setCartItems((items) =>
           items.map((item) =>
-            item._id === id ? { ...item, quantity: oldQuantity } : item
-          )
+            item._id === id ? { ...item, quantity: oldQuantity } : item,
+          ),
         );
         delete originalQuantities.current[id];
       } finally {
@@ -102,7 +103,7 @@ const CartItem = (props: IProps) => {
     }
   };
   return (
-    <div className="cart-items">
+    <>
       {cartItems.map((item) => (
         <div key={item._id} className="cart-item">
           <div className="item-image">
@@ -150,7 +151,7 @@ const CartItem = (props: IProps) => {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 export default CartItem;

@@ -125,11 +125,11 @@ const UserUpdate = (props: IProps) => {
             </Form.Item>
           </Col>
 
-          <Col span={24} md={12}>
+          {/* <Col span={24} md={12}>
             <Form.Item label="Address" name="address">
               <Input />
             </Form.Item>
-          </Col>
+          </Col> */}
 
           <Col span={24} md={12}>
             <Form.Item

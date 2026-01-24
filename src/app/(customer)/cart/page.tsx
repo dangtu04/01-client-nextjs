@@ -6,8 +6,8 @@ interface IProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 const CartPage = async (props: IProps) => {
-  const current = props?.searchParams?.current ?? 1;
-  const pageSize = props?.searchParams?.pageSize ?? 10;
+  const current = Number(props?.searchParams?.current) || 1;
+  const pageSize = 10;
   const sort = "-createdAt";
   const res = await sendAuthRequest<IBackendRes<IModelPaginate<ICartItem>>>({
     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/carts`,
@@ -15,12 +15,10 @@ const CartPage = async (props: IProps) => {
     queryParams: { current, pageSize, sort },
     nextOption: {
       next: { tags: ["list-cart"] },
+      // cache: "no-store",
     },
+  });
 
-  }
-
-);
-  // console.log(">>>>>>> res: ", res);
   return (
     <>
       <Cart items={res?.data?.results ?? []} meta={res?.data?.meta} />
