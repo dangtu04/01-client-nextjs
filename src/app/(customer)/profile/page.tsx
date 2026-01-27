@@ -10,6 +10,7 @@ const ProfilePage = async () => {
       next: { tags: ["profile-user"] },
     },
   });
+
   return (
     <>
       <Profile userData={res.data} />

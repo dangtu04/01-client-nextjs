@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, Descriptions, Button, Avatar, Form, message } from "antd";
 import {
   UserOutlined,
@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import EditProfileModal from "./edit.profile.modal";
 import { IProfileUser } from "@/types/models/user.model";
+import { handleUpdateProfileAction } from "@/actions/users.actions";
 
 interface IProps {
   userData?: IProfileUser;
@@ -28,12 +29,14 @@ const Profile = ({ userData }: IProps) => {
     });
   };
 
+  // lấy địa chỉ
   const getFullAddress = () => {
     if (!userData?.address) return "Chưa cập nhật";
     const { detaill, wardName, provinceName } = userData?.address;
     return `${detaill || ""}, ${wardName}, ${provinceName}`.trim();
   };
 
+  // hiện modal, set các field 
   const showModal = () => {
     form.setFieldsValue({
       name: userData?.name,
@@ -47,15 +50,34 @@ const Profile = ({ userData }: IProps) => {
     setIsModalOpen(true);
   };
 
+  // đóng modal, reset form
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
 
-  const handleSubmit = (values: any) => {
-    console.log("Form values:", values);
-    message.success("Cập nhật hồ sơ thành công");
-    setIsModalOpen(false);
+  // hàm gửi data cập nhật
+  const handleSubmit = async (values: any) => {
+    const data = {
+      address: {
+        provinceCode: values.provinceCode,
+        provinceName: values.provinceName,
+        wardCode: values.wardCode,
+        wardName: values.wardName,
+        detaill: values.detaill,
+      },
+      name: values.name,
+      phone: values.phone,
+    };
+
+    const res = await handleUpdateProfileAction(data);
+
+    if (res && res.statusCode === 200) {
+      message.success("Cập nhật hồ sơ thành công");
+      setIsModalOpen(false);
+    } else {
+      message.error("Cập nhật hồ sơ thất bại");
+    }
   };
 
   return (
@@ -212,14 +234,17 @@ const Profile = ({ userData }: IProps) => {
         </Card>
       </div>
 
+      {isModalOpen && (
+        <EditProfileModal
+          isModalOpen={isModalOpen}
+          form={form}
+          userData={userData}
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+        />
+      )}
+
       {/* Edit Modal */}
-      <EditProfileModal
-        isModalOpen={isModalOpen}
-        form={form}
-        userData={userData}
-        onCancel={handleCancel}
-        onSubmit={handleSubmit}
-      />
     </div>
   );
 };

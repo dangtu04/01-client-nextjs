@@ -63,3 +63,9 @@ export interface IProfileUser extends IUser {
   updatedAt?: string;
   __v?: number;
 }
+
+export interface IUpdateProfileDTO {
+  name?: string;
+  phone?: string;
+  address?: IUserAddress;
+}
