@@ -84,6 +84,8 @@ const CartItem = (props: IProps) => {
       }
     }, 500);
   }, []);
+
+
   const deleteItem = async (itemId: string) => {
     const previousItems = cartItems;
 
@@ -102,6 +104,7 @@ const CartItem = (props: IProps) => {
       message.error("Có lỗi xảy ra");
     }
   };
+
   return (
     <>
       {cartItems.map((item) => (

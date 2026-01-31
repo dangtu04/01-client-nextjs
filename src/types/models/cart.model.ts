@@ -15,7 +15,7 @@ interface ICartProduct {
   name: string;
   price: number;
   thumbnail: IThumbnail;
-  status: ProductStatus | string; 
+  status: ProductStatus | string;
 }
 
 export interface ICartItem {
@@ -25,4 +25,9 @@ export interface ICartItem {
   quantity: number;
   variant: ICartVariant;
   subtotal: number;
+}
+
+export interface ICartData {
+  results: ICartItem[];
+  totalPrice: number;
 }

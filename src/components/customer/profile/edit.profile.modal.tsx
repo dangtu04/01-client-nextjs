@@ -218,7 +218,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
             <Form.Item
               label="Số nhà, tên đường"
-              name="detaill"
+              name="detail"
               style={{ margin: 0 }}
             >
               <Input

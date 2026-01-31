@@ -47,21 +47,16 @@ export interface IUserAddress {
   provinceName: string;
   wardCode: number;
   wardName: string;
-  detaill: string;
+  detail: string;
 }
 
 // interface cho profile user
-export interface IProfileUser extends IUser {
-  image: string | null;
+export interface IProfileUser {
+  _id: string;
+  name: string;
+  email: string;
   phone?: string;
-  accountType: "LOCAL" | "GOOGLE" | "GITHUB";
-  isActive: boolean;
   address?: IUserAddress;
-  codeId?: string;
-  codeExpired?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  __v?: number;
 }
 
 export interface IUpdateProfileDTO {

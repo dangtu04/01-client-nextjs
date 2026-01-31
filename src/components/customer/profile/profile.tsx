@@ -32,8 +32,8 @@ const Profile = ({ userData }: IProps) => {
   // lấy địa chỉ
   const getFullAddress = () => {
     if (!userData?.address) return "Chưa cập nhật";
-    const { detaill, wardName, provinceName } = userData?.address;
-    return `${detaill || ""}, ${wardName}, ${provinceName}`.trim();
+    const { detail, wardName, provinceName } = userData?.address;
+    return `${detail || ""}, ${wardName}, ${provinceName}`.trim();
   };
 
   // hiện modal, set các field 
@@ -45,7 +45,7 @@ const Profile = ({ userData }: IProps) => {
       provinceName: userData?.address?.provinceName,
       wardCode: userData?.address?.wardCode,
       wardName: userData?.address?.wardName,
-      detaill: userData?.address?.detaill,
+      detail: userData?.address?.detail,
     });
     setIsModalOpen(true);
   };
@@ -64,7 +64,7 @@ const Profile = ({ userData }: IProps) => {
         provinceName: values.provinceName,
         wardCode: values.wardCode,
         wardName: values.wardName,
-        detaill: values.detaill,
+        detail: values.detail,
       },
       name: values.name,
       phone: values.phone,
@@ -76,6 +76,7 @@ const Profile = ({ userData }: IProps) => {
       message.success("Cập nhật hồ sơ thành công");
       setIsModalOpen(false);
     } else {
+      // console.log("res update profile error:", res);
       message.error("Cập nhật hồ sơ thất bại");
     }
   };
@@ -208,7 +209,7 @@ const Profile = ({ userData }: IProps) => {
               {userData?.phone || "Chưa cập nhật"}
             </Descriptions.Item>
 
-            <Descriptions.Item
+            {/* <Descriptions.Item
               label={
                 <span>
                   <CalendarOutlined style={{ marginRight: "8px" }} />
@@ -217,7 +218,7 @@ const Profile = ({ userData }: IProps) => {
               }
             >
               {formatDate(userData?.createdAt)}
-            </Descriptions.Item>
+            </Descriptions.Item> */}
 
             <Descriptions.Item
               label={

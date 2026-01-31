@@ -17,10 +17,11 @@ interface IProps {
     pages: number;
     totals: number;
   };
+   totalPrice: number;
 }
 
 const Cart = (props: IProps) => {
-  const { items, meta } = props;
+  const { items, meta, totalPrice } = props;
 
   const searchParams = useSearchParams();
 
@@ -30,10 +31,12 @@ const Cart = (props: IProps) => {
     return price.toLocaleString("vi-VN") + "đ";
   };
 
-  const subTotal = items.reduce((sum, item) => sum + item.subtotal, 0) || 0;
-  const shipping = subTotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.DEFAULT_FEE;
-  const total = subTotal + shipping;
-
+  // const subTotal = items.reduce((sum, item) => sum + item.subtotal, 0) || 0;
+  const shipping =
+    totalPrice >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD
+      ? 0
+      : SHIPPING_CONFIG.DEFAULT_FEE;
+  const total = totalPrice + shipping;
 
   if (items.length === 0) {
     return (
@@ -67,7 +70,7 @@ const Cart = (props: IProps) => {
 
             <div className="summary-row">
               <span>Tạm tính</span>
-              <span>{formatPrice(subTotal)}</span>
+              <span>{formatPrice(totalPrice)}</span>
             </div>
 
             <div className="summary-row">
@@ -82,13 +85,17 @@ const Cart = (props: IProps) => {
               <span>{formatPrice(total)}</span>
             </div>
 
-            <button className="btn-checkout">Thanh toán</button>
+            <Link href="/checkout">
+              <button className="btn-checkout">Thanh toán</button>
+            </Link>
 
             <div className="shipping-note">
               <p>Miễn phí vận chuyển cho đơn hàng từ 500.000đ</p>
             </div>
 
-            <Link href="/"><button className="btn-continue">Tiếp tục mua sắm</button></Link>
+            <Link href="/">
+              <button className="btn-continue">Tiếp tục mua sắm</button>
+            </Link>
           </div>
         </div>
       </div>
