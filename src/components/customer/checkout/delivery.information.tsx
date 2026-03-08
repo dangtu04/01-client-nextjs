@@ -1,5 +1,6 @@
 "use client";
 
+import { PaymentMethod } from "@/types/models/order.model";
 import { IProfileUser } from "@/types/models/user.model";
 import { Input, Button, Radio, Select, Form } from "antd";
 import { FormInstance } from "antd/lib/form";
@@ -9,9 +10,10 @@ const { Option } = Select;
 interface DeliveryInformationProps {
   form: FormInstance;
   userData?: IProfileUser;
-  paymentMethod: string;
-  setPaymentMethod: (value: string) => void;
+  paymentMethod: PaymentMethod;
+  setPaymentMethod: (value: PaymentMethod) => void;
   handleSubmit: (values: any) => void;
+  isLoading?: boolean;
 }
 
 interface ISelectProvince {
@@ -25,8 +27,8 @@ const DeliveryInformation = ({
   paymentMethod,
   setPaymentMethod,
   handleSubmit,
+  isLoading = false,
 }: DeliveryInformationProps) => {
-  console.log("userData in DeliveryInformation:", userData);
 
   const [listProvinces, setListProvinces] = useState<ISelectProvince[]>([]);
   const [listWards, setListWards] = useState<ISelectProvince[]>([]);
@@ -45,7 +47,7 @@ const DeliveryInformation = ({
   // không sài state selectedProvince làm dependency
   useEffect(() => {
     // if (!isModalOpen) return;
-
+ 
     const provinceCode = userData?.address?.provinceCode;
 
     // load wards
@@ -188,7 +190,7 @@ const DeliveryInformation = ({
             <Input placeholder="Địa chỉ (tùy chọn)" size="large" />
           </Form.Item>
 
-          <Form.Item name="notes">
+          <Form.Item name="note">
             <Input.TextArea
               placeholder="Ghi chú (tùy chọn)"
               rows={3}
@@ -205,22 +207,22 @@ const DeliveryInformation = ({
             className="payment-methods"
           >
             <div className="payment-option">
-              <Radio value="bank_transfer">
-                <span className="payment-label">Chuyển khoản</span>
-              </Radio>
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300a8e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cline x1='2' y1='10' x2='22' y2='10'/%3E%3C/svg%3E"
-                alt="bank"
-                className="payment-icon"
-              />
-            </div>
-            <div className="payment-option">
-              <Radio value="cod">
-                <span className="payment-label">Thu hộ (COD)</span>
+              <Radio value={PaymentMethod.COD}>
+                <span className="payment-label">Tiền mặt (COD)</span>
               </Radio>
               <img
                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300a8e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='1' x2='12' y2='23'/%3E%3Cpath d='M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/%3E%3C/svg%3E"
                 alt="cash"
+                className="payment-icon"
+              />
+            </div>
+            <div className="payment-option">
+              <Radio value={PaymentMethod.VNPAY}>
+                <span className="payment-label">Thanh toán với VNPAY</span>
+              </Radio>
+              <img style={{width: "72px"}}
+                src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg"
+                alt="bank"
                 className="payment-icon"
               />
             </div>
@@ -233,6 +235,7 @@ const DeliveryInformation = ({
           size="large"
           className="checkout-btn"
           onClick={() => form.submit()}
+          disabled={isLoading}
         >
           ĐẶT HÀNG
         </Button>

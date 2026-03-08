@@ -32,7 +32,6 @@ const CheckoutPage = async (props: IProps) => {
     },
   });
 
-  console.log("userData checkout page", userData);
   return (
     <>
       <Checkout

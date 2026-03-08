@@ -1,13 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
-import { Form } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, message } from "antd";
 import "./checkout.scss";
 import DeliveryInformation from "./delivery.information";
 import OrderSummary from "./order.summary";
 import { ICartItem } from "@/types/models/cart.model";
 import { SHIPPING_CONFIG } from "@/utils/shipping";
 import { IProfileUser } from "@/types/models/user.model";
+import { PaymentMethod } from "@/types/models/order.model";
+import {
+  handleCreateCODOrderAction,
+  handleCreateVNPayOrderAction,
+} from "@/actions/orders.actions";
+import { useRouter } from "next/navigation";
+
+// Fix 6: Định nghĩa interface thay vì dùng any
+interface ICheckoutFormValues {
+  name: string;
+  phone: string;
+  provinceCode: string;
+  provinceName: string;
+  wardCode: string;
+  wardName: string;
+  detail: string;
+  note?: string;
+}
 
 interface IProps {
   cartItems: ICartItem[];
@@ -22,12 +40,17 @@ interface IProps {
 }
 
 const Checkout = (props: IProps) => {
-  const [paymentMethod, setPaymentMethod] = useState("bank_transfer");
+  // Fix 2: Dùng enum trực tiếp thay vì .toString()
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
+    PaymentMethod.COD,
+  );
+  // Fix 5: Thêm loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
+  // Fix 3: Dùng useRouter để redirect
+  const router = useRouter();
 
   const { cartItems, totalPrice, userData } = props;
-
-  // console.log("userData checkout component", userData);
 
   const subtotal = totalPrice;
   const shippingFee =
@@ -36,21 +59,66 @@ const Checkout = (props: IProps) => {
       : SHIPPING_CONFIG.DEFAULT_FEE;
   const total = subtotal + shippingFee;
 
-  const handleSubmit = (values: any) => {
-    console.log("Form values:", values);
-    console.log("Payment method:", paymentMethod);
+  // Fix 6: Dùng ICheckoutFormValues thay vì any
+  const handleSubmit = async (values: ICheckoutFormValues) => {
+    setIsLoading(true);
+    try {
+      const data = {
+        paymentMethod,
+        delivery: {
+          receiverName: values.name,
+          receiverPhone: values.phone,
+          address: {
+            provinceCode: values.provinceCode,
+            provinceName: values.provinceName,
+            wardCode: values.wardCode,
+            wardName: values.wardName,
+            detail: values.detail,
+          },
+          note: values.note || "",
+        },
+      };
 
+      // Fix 2: So sánh đúng kiểu enum
+      if (paymentMethod === PaymentMethod.COD) {
+        const res = await handleCreateCODOrderAction(data);
+        if (res?.success) {
+          message.success("Đặt hàng thành công");
+          // Fix 3: Redirect sau khi đặt hàng thành công
+          router.push("/orders");
+        } else {
+          message.error(res?.message || "Đặt hàng thất bại");
+        }
+      }
+
+      if (paymentMethod === PaymentMethod.VNPAY) {
+        const res = await handleCreateVNPayOrderAction(data);
+        if (res?.success && res?.paymentUrl) {
+          window.location.href = res.paymentUrl;
+        } else {
+          message.error(res?.message || "Tạo đơn hàng thất bại");
+        }
+      }
+    } finally {
+      // Fix 5: Tắt loading dù thành công hay thất bại
+      setIsLoading(false);
+    }
   };
 
-   form.setFieldsValue({
-      name: userData?.name,
-      phone: userData?.phone,
-      provinceCode: userData?.address?.provinceCode,
-      provinceName: userData?.address?.provinceName,
-      wardCode: userData?.address?.wardCode,
-      wardName: userData?.address?.wardName,
-      detail: userData?.address?.detail,
-    });
+  // Fix 4: Thêm đủ dependencies
+  useEffect(() => {
+    if (userData) {
+      form.setFieldsValue({
+        name: userData?.name,
+        phone: userData?.phone,
+        provinceCode: userData?.address?.provinceCode,
+        provinceName: userData?.address?.provinceName,
+        wardCode: userData?.address?.wardCode,
+        wardName: userData?.address?.wardName,
+        detail: userData?.address?.detail,
+      });
+    }
+  }, [userData, form]);
 
   return (
     <div className="checkout-container">
@@ -62,6 +130,8 @@ const Checkout = (props: IProps) => {
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
           handleSubmit={handleSubmit}
+          // Fix 5: Truyền isLoading xuống để disable nút submit
+          isLoading={isLoading}
         />
 
         {/* Right Section - Order Summary */}
