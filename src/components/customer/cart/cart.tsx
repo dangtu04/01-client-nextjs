@@ -23,6 +23,8 @@ interface IProps {
 const Cart = (props: IProps) => {
   const { items, meta, totalPrice } = props;
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const searchParams = useSearchParams();
 
   const pageKey = `${searchParams.get("current")}-${searchParams.get("pageSize")}`;
@@ -61,7 +63,7 @@ const Cart = (props: IProps) => {
 
         <div className="cart-content">
           <div className="cart-items">
-            <CartItem items={items} />
+            <CartItem items={items} onLoadingChange={setIsLoading} />
 
             <PaginationLayout meta={meta} />
           </div>
@@ -86,7 +88,7 @@ const Cart = (props: IProps) => {
             </div>
 
             <Link href="/checkout">
-              <button className="btn-checkout">Thanh toán</button>
+              <button className="btn-checkout" disabled={isLoading}>Thanh toán</button>
             </Link>
 
             <div className="shipping-note">

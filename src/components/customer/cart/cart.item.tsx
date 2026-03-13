@@ -12,12 +12,14 @@ import { useCallback, useRef, useState } from "react";
 
 interface IProps {
   items: ICartItem[];
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
 const CartItem = (props: IProps) => {
-  const { items } = props;
+  const { items, onLoadingChange } = props;
 
   const [cartItems, setCartItems] = useState<ICartItem[]>(items);
+  const [isLoading, setIsLoading] = useState(false);
 
   // lưu timeout của itemId
   const updateTimeouts = useRef<{ [itemId: string]: NodeJS.Timeout }>({});
@@ -55,6 +57,10 @@ const CartItem = (props: IProps) => {
       clearTimeout(updateTimeouts.current[id]);
     }
 
+    // set loading thành true
+    setIsLoading(true);
+    onLoadingChange?.(true);
+
     updateTimeouts.current[id] = setTimeout(async () => {
       // lưu qty để cập nhật
       const quantityToUpdate = latestQuantities.current[id];
@@ -81,6 +87,8 @@ const CartItem = (props: IProps) => {
       } finally {
         delete latestQuantities.current[id];
         delete updateTimeouts.current[id];
+        setIsLoading(false);
+        onLoadingChange?.(false);
       }
     }, 500);
   }, []);

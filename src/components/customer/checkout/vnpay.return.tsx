@@ -3,6 +3,7 @@
 import { PaymentStatus } from "@/types/models/order.model";
 import { Button, Result } from "antd";
 import { useRouter } from "next/navigation";
+import "./vnpay.return.scss";
 
 interface VNPayReturnResponse {
   success: boolean;
@@ -20,43 +21,51 @@ const VNPayReturn = ({ data }: VNPayReturnProps) => {
 
   if (data?.success) {
     return (
+      <div className="vnpay-return">
+        <Result
+          status="success"
+          title="Thanh toán thành công!"
+          subTitle={`Mã đơn hàng: ${data.orderId}`}
+          extra={[
+            <Button
+              type="primary"
+              key="orders"
+              onClick={() => router.push("/orders")}
+            >
+              Xem đơn hàng
+            </Button>,
+            <Button key="home" onClick={() => router.push("/")}>
+              Về trang chủ
+            </Button>,
+          ]}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="vnpay-return">
       <Result
-        status="success"
-        title="Thanh toán thành công!"
-        subTitle={`Mã đơn hàng: ${data.orderId}`}
+        status="error"
+        title="Thanh toán thất bại"
+        subTitle={
+          data?.message ||
+          "Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại."
+        }
         extra={[
           <Button
             type="primary"
-            key="orders"
-            onClick={() => router.push("/orders")}
+            key="retry"
+            onClick={() => router.push("/checkout")}
           >
-            Xem đơn hàng
+            Thử lại
           </Button>,
           <Button key="home" onClick={() => router.push("/")}>
             Về trang chủ
           </Button>,
         ]}
       />
-    );
-  }
-
-  return (
-    <Result
-      status="error"
-      title="Thanh toán thất bại"
-      subTitle={
-        data?.message ||
-        "Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại."
-      }
-      extra={[
-        <Button type="primary" key="retry" onClick={() => router.push("/checkout")}>
-          Thử lại
-        </Button>,
-        <Button key="home" onClick={() => router.push("/")}>
-          Về trang chủ
-        </Button>,
-      ]}
-    />
+    </div>
   );
 };
 

@@ -7,6 +7,7 @@ import {
   ProductOutlined,
   SettingOutlined,
   ShopOutlined,
+  SolutionOutlined,
   TeamOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
@@ -50,6 +51,11 @@ const AdminSideBar = () => {
           key: "products",
           label: <Link href={"/admin/product"}>Sản phẩm</Link>,
           icon: <ProductOutlined />,
+        },
+        {
+          key: "orders",
+          label: <Link href={"/admin/order"}>Đơn hàng</Link>,
+          icon: <SolutionOutlined />,
         },
         {
           key: "sub1",

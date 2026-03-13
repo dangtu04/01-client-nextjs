@@ -1,0 +1,47 @@
+.order-filter-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
+
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #8c8c8c;
+    line-height: 1;
+    white-space: nowrap;
+  }
+}
+.order-status-pending .ant-select-selection-item {
+  color: orange;
+}
+
+.order-status-confirmed .ant-select-selection-item {
+  color: #1677ff;
+}
+
+.order-status-processing .ant-select-selection-item {
+  color: cyan;
+}
+
+.order-status-shipping .ant-select-selection-item {
+  color: purple;
+}
+
+.order-status-completed .ant-select-selection-item {
+  color: green;
+}
+
+.order-status-cancelled .ant-select-selection-item {
+  color: red;
+}
+
+.order-status-refunded .ant-select-selection-item {
+  color: gray;
+}

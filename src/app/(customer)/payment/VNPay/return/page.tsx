@@ -36,7 +36,7 @@ const VNPayReturnPage = async ({ searchParams }: VNPayReturnPageProps) => {
     queryParams: { ...searchParams },
     // nextOption: {},
   });
-  // console.log(">>>>>>>>>>>> response: ", res);
+  console.log(">>>>>>>>>>>> response: ", res);
   return <VNPayReturn data={res.data} />;
 };
 
