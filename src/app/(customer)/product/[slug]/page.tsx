@@ -8,12 +8,8 @@ interface ProductDetailPageProps {
   params: { slug: string };
 }
 
-// dynamic metadata
-export async function generateMetadata({
-  params,
-}: ProductDetailPageProps): Promise<Metadata> {
-  const { slug } = params;
-
+// hàm gọi api dùng chung cho cả page và metadata
+async function getProductDetail(slug: string) {
   const res = await sendRequest<
     IBackendRes<{
       product: IProductDetail;
@@ -24,55 +20,67 @@ export async function generateMetadata({
     method: "GET",
     nextOption: {
       next: {
+        // tag để revalidate cache khi cần
         tags: [`product-detail-${slug}`],
+        // cache 1 tiếng
         revalidate: 3600,
       },
     },
   });
 
-  const product = res?.data?.product;
+  return res?.data;
+}
 
+// dynamic metadata cho trang chi tiết sản phẩm
+export async function generateMetadata({
+  params,
+}: ProductDetailPageProps): Promise<Metadata> {
+  const data = await getProductDetail(params.slug);
+  const product = data?.product;
+
+  // nếu không có sản phẩm
   if (!product) {
-    return { title: "Sản phẩm không tồn tại" };``
+    return {
+      title: "sản phẩm không tồn tại",
+      description: "không tìm thấy sản phẩm",
+    };
   }
 
   return {
     title: product.name,
-    description: product.description,
+
+    // cắt description <160 kt
+    description: product.description?.slice(0, 160),
+
+    // open graph để share facebook, zalo
     openGraph: {
-      images: [product.thumbnail.secureUrl],
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: [product.thumbnail?.secureUrl],
+      type: "website",
+    },
+
+    // canonical url tránh trùng lặp seo
+    alternates: {
+      canonical: `/product/${params.slug}`,
     },
   };
 }
 
+// page chính
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
-  const { slug } = params;
+  const data = await getProductDetail(params.slug);
 
-  const res = await sendRequest<
-    IBackendRes<{
-      product: IProductDetail;
-      images: string[];
-    }>
-  >({
-    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/products/detail/${slug}`,
-    method: "GET",
-    nextOption: {
-      next: {
-        tags: ["product-detail", `product-detail-${slug}`],
-        revalidate: 3600,
-      },
-    },
-  });
-
-  if (!res?.data?.product) {
+  // nếu không có sản phẩm thì chuyển sang trang 404
+  if (!data?.product) {
     notFound();
   }
 
   return (
     <div>
-      <ProductDetail product={res.data.product} images={res.data.images} />
+      <ProductDetail product={data.product} images={data.images} />
     </div>
   );
 }

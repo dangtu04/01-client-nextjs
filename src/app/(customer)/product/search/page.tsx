@@ -6,6 +6,11 @@ interface IProps {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
+
+export const metadata = {
+  title: "Tìm kiếm sản phẩm",
+};
+
 const ProductSearchPage = async ({ params, searchParams }: IProps) => {
   const keyword = (searchParams?.keyword as string) || "";
 

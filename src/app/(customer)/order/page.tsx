@@ -8,6 +8,9 @@ interface IProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
+export const metadata = {
+  title: "Đơn hàng",
+};
 const OrderPage = async (props: IProps) => {
   const current = props?.searchParams?.current ?? 1;
   const pageSize = props?.searchParams?.pageSize ?? 10;

@@ -9,6 +9,9 @@ interface IProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
+export const metadata = {
+  title: "Thanh toán",
+};
 const CheckoutPage = async (props: IProps) => {
   const current = Number(props?.searchParams?.current) || 1;
   const pageSize = 5;

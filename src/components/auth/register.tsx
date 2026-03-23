@@ -15,7 +15,7 @@ const Register = () => {
       url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`,
       body: { email, name, password },
     });
-    console.log("check response: ", res);
+    // console.log("check response: ", res);
     if (res?.data) {
       router.push(`/verify/${res?.data?._id}`);
     } else {

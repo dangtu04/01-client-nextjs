@@ -16,7 +16,12 @@ export const menuData = [
   },
   {
     id: 4,
-    title: "Liên hệ",
-    link: "/contact",
-  },
+    title: "Giỏ hàng",
+    link: "/cart",
+  }
+  // {
+  //   id: 5,
+  //   title: "Liên hệ",
+  //   link: "/contact",
+  // },
 ];

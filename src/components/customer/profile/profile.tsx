@@ -151,7 +151,7 @@ const Profile = ({ userData }: IProps) => {
                 borderColor: "#333",
                 height: "40px",
                 padding: "0 24px",
-                borderRadius: "6px",
+                borderRadius: "0px",
               }}
             >
               Chỉnh sửa hồ sơ

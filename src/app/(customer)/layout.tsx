@@ -4,6 +4,15 @@ import CustomerHeader from "@/components/customer/layouts/header";
 import { ICartItem } from "@/types/models/cart.model";
 import { sendAuthRequest } from "@/utils/api";
 
+
+export const metadata = {
+  title: {
+    default: process.env.NEXT_PUBLIC_DEFAULT_WEBNAME,
+    template: `%s | ${process.env.NEXT_PUBLIC_DEFAULT_WEBNAME}`,
+  },
+  description: process.env.NEXT_PUBLIC_DEFAULT_DESCRIPTION,
+};
+
 export default async function CustomerLayout({
   children,
 }: {

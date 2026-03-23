@@ -15,8 +15,8 @@ import MenuVertical from "./menu.vertical";
 import Link from "next/link";
 import type { MenuProps } from "antd";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
+import { redirect, useRouter } from "next/navigation";
+const logoImage = "/logo.png";
 interface CustomerHeaderProps {
   totalQty: number;
   isAuthenticated: boolean;
@@ -26,6 +26,7 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -76,10 +77,10 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
             <MenuOutlined style={{ fontSize: "24px", color: "#fff" }} />
           </div>
 
-          <div className="logo">
+          <div className="logo" onClick={() => router.push("/")}>
             <img
-              src="https://placehold.co/120x40/000000/FFFFFF/png?text=iGO+STORE"
-              alt="iGO Store"
+              src={logoImage}
+              alt={process.env.NEXT_PUBLIC_APP_NAME || "Logo"}
             />
           </div>
 
@@ -100,7 +101,7 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
           <div className="header-actions">
             <div
               className="action-item action-item-search"
-              onClick={handleSearch}
+              onClick={() => setIsSearchModalOpen(true)}
               style={{ cursor: "pointer" }}
             >
               <SearchOutlined style={{ fontSize: "24px" }} />
@@ -139,6 +140,47 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
       <MenuHorizontal data={data} />
 
       <MenuVertical data={data} isOpen={isMenuOpen} onClose={closeMenu} />
+
+      {/* Search Modal */}
+      {isSearchModalOpen && (
+        <div
+          className="search-modal-overlay"
+          onClick={() => setIsSearchModalOpen(false)}
+        >
+          <div
+            className="search-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="search-modal-title">TÌM KIẾM</h2>
+            <div className="search-modal-input-wrapper">
+              <input
+                type="text"
+                placeholder="Tìm kiếm sản phẩm..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="search-modal-input"
+                autoFocus
+              />
+              <button
+                className="search-modal-button"
+                onClick={() => {
+                  handleSearch();
+                  setIsSearchModalOpen(false);
+                }}
+              >
+                <SearchOutlined style={{ fontSize: "20px" }} />
+              </button>
+            </div>
+            <button
+              className="search-modal-close"
+              onClick={() => setIsSearchModalOpen(false)}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

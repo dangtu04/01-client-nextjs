@@ -4,8 +4,9 @@ import { ICategory, IProductCard } from "@/types/models/product.model";
 import ProductCard from "../product/product.card";
 import ProductCardSkeleton from "@/components/customer/product/product.card.skeleton";
 import { handleGetProductsPublicAction } from "@/actions/products.actions";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Button, InputNumber, Select } from "antd";
+import { useSearchParams } from "next/navigation";
 import "./product.all.scss";
 
 const { Option } = Select;
@@ -23,6 +24,7 @@ const ProductAll = ({
   listCategoriesForSelect,
   listBrandsForSelect,
 }: IProps) => {
+  const searchParams = useSearchParams();
   const [products, setProducts] = useState<IProductCard[]>(initialProducts);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -33,6 +35,15 @@ const ProductAll = ({
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [category, setCategory] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
+
+  // Lấy categoryId từ query parameter khi component mount
+  useEffect(() => {
+    const categoryId = searchParams.get("categoryId");
+    if (categoryId) {
+      setCategory(categoryId);
+    }
+    fetchProducts(1, false, { category: categoryId });
+  }, [searchParams]);
 
   // dùng useMemo để không tạo lại options nếu list categories không đổi
   const categoryOptions = useMemo(
@@ -54,16 +65,26 @@ const ProductAll = ({
   );
 
   // fetch products để tái sử dụng cho filter và load more
-  const fetchProducts = async (page: number, isLoadMore = false) => {
+  const fetchProducts = async (
+    page: number,
+    isLoadMore = false,
+    overrideParams?: {
+      minPrice?: number | null;
+      maxPrice?: number | null;
+      category?: string;
+      brand?: string;
+    },
+  ) => {
     setLoading(true);
+    const params = overrideParams ?? { minPrice, maxPrice, category, brand };
     try {
       const result = await handleGetProductsPublicAction({
         current: page,
         pageSize: PAGE_SIZE,
         minPrice: minPrice ?? undefined,
         maxPrice: maxPrice ?? undefined,
-        categoryId: category || undefined,
-        brandId: brand || undefined,
+        categoryId: params.category || undefined,
+        brandId: params.brand || undefined,
       });
 
       const newProducts = result?.data?.results ?? [];

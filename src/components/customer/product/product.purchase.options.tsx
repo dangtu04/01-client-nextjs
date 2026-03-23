@@ -54,7 +54,7 @@ const ProductPurchaseOptions = ({ variants, productId }: IProps) => {
           <label>
             Kích thước: <strong>{selectedVariant.sizeName}</strong>
           </label>
-          <p className="size-guide">Hướng dẫn chọn size</p>
+          {/* <p className="size-guide">Hướng dẫn chọn size</p> */}
         </div>
         <div className="size-options">
           {variants.map((size) => (

@@ -8,6 +8,10 @@ interface OrderDetailPageProps {
   params: { id: string };
 }
 
+export const metadata = {
+  title: "Chi tiết đơn hàng",
+};
+
 const OrderDetailContent = async ({ id }: { id: string }) => {
   const res = await sendAuthRequest<IBackendRes<IOrder>>({
     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/orders/order-id/${id}`,

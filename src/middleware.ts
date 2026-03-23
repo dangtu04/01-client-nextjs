@@ -16,11 +16,11 @@ export default auth((req) => {
   if (isAdminRoute) {
     // không login, redirect về /
     if (!session) {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/not-found", req.url));
     }
     // login là user, redirect về /
     if (session.user.role !== UserRole.ADMIN) {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/not-found", req.url));
     }
 
     return NextResponse.next();
@@ -28,7 +28,7 @@ export default auth((req) => {
 
   // không phải admin, không phải public
   if (!isPublicRoute && !session) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/not-found", req.url));
   }
 
   // đã login mà vào trang login/register, redirect về /

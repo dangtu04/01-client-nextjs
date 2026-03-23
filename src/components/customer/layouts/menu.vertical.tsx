@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import "./menu.vertical.scss";
+import Link from "next/link";
 
 interface IProps {
   data: any;
   isOpen: boolean;
   onClose: () => void;
 }
-
+// menu thẳng dứng cho mobile, tablet
 const MenuVertical = (props: IProps) => {
   const { data, isOpen, onClose } = props;
   const [openMenus, setOpenMenus] = useState<number[]>([]);
@@ -42,9 +43,9 @@ const MenuVertical = (props: IProps) => {
             {data.map((item: any) => (
               <li key={item.id} className="menu-item">
                 <div className="menu-item-header">
-                  <a href={item.link} className="menu-link">
+                  <Link href={item.link} className="menu-link">
                     {item.title}
-                  </a>
+                  </Link>
                   {item.submenu && (
                     <button
                       className="toggle-btn"
@@ -61,9 +62,9 @@ const MenuVertical = (props: IProps) => {
                     {item.submenu.map((subItem: any) => (
                       <li key={subItem.id} className="submenu-item">
                         <div className="submenu-item-header">
-                          <a href={subItem.link} className="submenu-link">
+                          <Link href={subItem.link} className="submenu-link">
                             {subItem.title}
-                          </a>
+                          </Link>
                           {subItem.submenu && (
                             <button
                               className="toggle-btn"
@@ -82,12 +83,12 @@ const MenuVertical = (props: IProps) => {
                                 key={subSubItem.id}
                                 className="submenu-item-3"
                               >
-                                <a
+                                <Link
                                   href={subSubItem.link}
                                   className="submenu-link-3"
                                 >
                                   {subSubItem.title}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>

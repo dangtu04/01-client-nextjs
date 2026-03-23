@@ -4,7 +4,6 @@ import { auth } from "@/auth";
 import { IProductCard, IProductVariant } from "@/types/models/product.model";
 import { sendAuthRequest, sendRequest, sendRequestFile } from "@/utils/api";
 import { revalidateTag } from "next/cache";
-import { cache } from "react";
 
 export const handleCreateProductAction = async (formData: FormData) => {
   const session = await auth();
@@ -109,6 +108,22 @@ export const handleGetNewProductsAction = async (
     queryParams: { current, pageSize },
     nextOption: {
       next: { tags: ["list-products"], revalidate: 3600 },
+    },
+  });
+  return res;
+};
+
+export const handleGetProductsByCategoryAction = async (
+  categoryId: string,
+  current: number,
+  pageSize: number,
+) => {
+  const res = await sendRequest<IBackendRes<IModelPaginate<IProductCard>>>({
+    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/products/category/${categoryId}`,
+    method: "GET",
+    queryParams: { current, pageSize },
+    nextOption: {
+      next: { tags: [`list-products-${categoryId}`], revalidate: 3600 },
     },
   });
   return res;

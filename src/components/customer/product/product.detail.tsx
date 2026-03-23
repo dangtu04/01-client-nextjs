@@ -9,7 +9,7 @@ interface IProps {
 
 const ProductDetail = async ({ product, images }: IProps) => {
   if (!product) return null;
-  console.log('>>>> product: ', product)
+  // console.log('>>>> product: ', product)
   // console.log(">>>>> product variant: ", product.variants);
 
   // ảnh chính của sản phẩm

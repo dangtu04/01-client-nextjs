@@ -3,6 +3,10 @@ import ProductAll from "@/components/customer/product/product.all";
 import { ICategory } from "@/types/models/product.model";
 import { sendRequest } from "@/utils/api";
 
+export const metadata = {
+  title: "Tất cả sản phẩm",
+};
+
 const ProductPage = async () => {
   const product = await handleGetProductsPublicAction({
     current: 1,

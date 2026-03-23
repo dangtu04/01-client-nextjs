@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import "./menu.horizontal.scss";
+import Link from "next/link";
 
 interface IProps {
   data: any;
 }
 
+// menu ngang cho desktop, laptop
 const MenuHorizontal = (props: IProps) => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubmenu, setActiveSubmenu] = useState(null);
@@ -26,10 +28,10 @@ const MenuHorizontal = (props: IProps) => {
                 setActiveSubmenu(null);
               }}
             >
-              <a href={item.link} className="menu-link">
+              <Link href={item.link} className="menu-link">
                 {item.title}
                 {item.submenu && <span className="arrow">▼</span>}
-              </a>
+              </Link>
 
               {/* Menu cấp 2 */}
               {item.submenu && activeMenu === item.id && (
@@ -40,22 +42,22 @@ const MenuHorizontal = (props: IProps) => {
                       className="submenu-item"
                       onMouseEnter={() => setActiveSubmenu(subItem.id)}
                     >
-                      <a href={subItem.link} className="submenu-link">
+                      <Link href={subItem.link} className="submenu-link">
                         {subItem.title}
                         {subItem.submenu && <span className="arrow">►</span>}
-                      </a>
+                      </Link>
 
                       {/* Menu cấp 3 */}
                       {subItem.submenu && activeSubmenu === subItem.id && (
                         <ul className="menu-level-3">
                           {subItem.submenu.map((subSubItem: any) => (
                             <li key={subSubItem.id} className="submenu-item-3">
-                              <a
+                              <Link
                                 href={subSubItem.link}
                                 className="submenu-link-3"
                               >
                                 {subSubItem.title}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>

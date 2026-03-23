@@ -92,7 +92,7 @@ const Cart = (props: IProps) => {
             </Link>
 
             <div className="shipping-note">
-              <p>Miễn phí vận chuyển cho đơn hàng từ 500.000đ</p>
+              <p>Miễn phí vận chuyển cho đơn hàng từ {formatPrice(SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD)}</p>
             </div>
 
             <Link href="/">
