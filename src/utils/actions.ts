@@ -30,4 +30,6 @@ export async function authenticate(email: string, password: string) {
     }
   }
 }
-
+export async function loginWithGoogle() {
+  await signIn("google", { redirectTo: "/" });
+}

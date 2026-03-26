@@ -211,3 +211,24 @@
     font-size: 11px;
   }
 }
+
+// login.scss — thêm vào cuối
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+
+  &:hover {
+    border-color: #4285f4;
+    color: #4285f4;
+    background: #f8f9ff;
+  }
+}
