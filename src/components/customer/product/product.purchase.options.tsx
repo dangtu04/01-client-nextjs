@@ -5,6 +5,8 @@ import { CartLimits } from "@/types/models/cart.model";
 import { IProductVariant } from "@/types/models/product.model";
 import { message } from "antd";
 import { useState } from "react";
+import NotificationModal from "../layouts/notification.modal";
+import { useSession } from "next-auth/react";
 
 interface IProps {
   variants: IProductVariant[];
@@ -13,9 +15,11 @@ interface IProps {
 
 const ProductPurchaseOptions = ({ variants, productId }: IProps) => {
   const [selectedVariant, setSelectedVariant] = useState<IProductVariant>(
-    variants[0]
+    variants[0],
   );
   const [quantity, setQuantity] = useState(1);
+  const [isOpenNotify, setIsOpenNotify] = useState(false);
+  const { data: session, status, update } = useSession();
 
   const handleQuantityChange = (action: "increment" | "decrement") => {
     if (action === "increment" && quantity < CartLimits.MAX_QUANTITY_PER_ITEM) {
@@ -26,6 +30,12 @@ const ProductPurchaseOptions = ({ variants, productId }: IProps) => {
   };
 
   const handleAddToCart = async () => {
+    update();
+    if (!session) {
+      setIsOpenNotify(true);
+      return;
+    }
+
     // console.log('>>>>> check: ', selectedVariant)
     const res = await handleAddtoCartAction(
       productId,
@@ -33,10 +43,10 @@ const ProductPurchaseOptions = ({ variants, productId }: IProps) => {
       quantity,
     );
     // console.log('>>>> res: ', res)
-    if(res?.statusCode === 201) {
-      message.success(res?.data?.message)
+    if (res?.statusCode === 201) {
+      message.success(res?.data?.message);
     } else {
-      message.error(res?.message)
+      message.error(res?.message);
     }
   };
 
@@ -81,10 +91,18 @@ const ProductPurchaseOptions = ({ variants, productId }: IProps) => {
         <button className="add-to-cart-btn" onClick={handleAddToCart}>
           THÊM VÀO GIỎ
         </button>
-        <button className="buy-now-btn" onClick={handleBuyNow}>
+        {/* <button className="buy-now-btn" onClick={handleBuyNow}>
           MUA NGAY
-        </button>
+        </button> */}
       </div>
+
+      <NotificationModal
+        open={isOpenNotify}
+        onClose={() => setIsOpenNotify(false)}
+        message="Vui lòng đăng nhập để tiếp tục."
+        redirectUrl="/login"
+        actionLabel="Đăng nhập"
+      />
     </>
   );
 };

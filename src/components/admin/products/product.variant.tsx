@@ -155,8 +155,8 @@ const ProductVariant = (props: IProps) => {
                           { required: true, message: "Nhập số lượng" },
                           {
                             type: "number",
-                            min: 0,
-                            message: "Số lượng phải >= 0",
+                            min: 1,
+                            message: "Số lượng phải >= 1",
                           },
                         ]}
                         style={{ marginBottom: 0 }}

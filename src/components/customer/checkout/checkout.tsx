@@ -40,14 +40,11 @@ interface IProps {
 }
 
 const Checkout = (props: IProps) => {
-  // Fix 2: Dùng enum trực tiếp thay vì .toString()
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
     PaymentMethod.COD,
   );
-  // Fix 5: Thêm loading state
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
-  // Fix 3: Dùng useRouter để redirect
   const router = useRouter();
 
   const { cartItems, totalPrice, userData } = props;
@@ -59,7 +56,6 @@ const Checkout = (props: IProps) => {
       : SHIPPING_CONFIG.DEFAULT_FEE;
   const total = subtotal + shippingFee;
 
-  // Fix 6: Dùng ICheckoutFormValues thay vì any
   const handleSubmit = async (values: ICheckoutFormValues) => {
     setIsLoading(true);
     try {
@@ -79,13 +75,11 @@ const Checkout = (props: IProps) => {
         },
       };
 
-      // Fix 2: So sánh đúng kiểu enum
       if (paymentMethod === PaymentMethod.COD) {
         const res = await handleCreateCODOrderAction(data);
         if (res?.success) {
           message.success("Đặt hàng thành công");
-          // Fix 3: Redirect sau khi đặt hàng thành công
-          router.push("/orders");
+          router.push("/order");
         } else {
           message.error(res?.message || "Đặt hàng thất bại");
         }
@@ -100,12 +94,10 @@ const Checkout = (props: IProps) => {
         }
       }
     } finally {
-      // Fix 5: Tắt loading dù thành công hay thất bại
       setIsLoading(false);
     }
   };
 
-  // Fix 4: Thêm đủ dependencies
   useEffect(() => {
     if (userData) {
       form.setFieldsValue({
@@ -130,7 +122,6 @@ const Checkout = (props: IProps) => {
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
           handleSubmit={handleSubmit}
-          // Fix 5: Truyền isLoading xuống để disable nút submit
           isLoading={isLoading}
         />
 

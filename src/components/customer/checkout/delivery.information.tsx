@@ -29,7 +29,6 @@ const DeliveryInformation = ({
   handleSubmit,
   isLoading = false,
 }: DeliveryInformationProps) => {
-
   const [listProvinces, setListProvinces] = useState<ISelectProvince[]>([]);
   const [listWards, setListWards] = useState<ISelectProvince[]>([]);
   const [loadingWards, setLoadingWards] = useState(false);
@@ -47,7 +46,7 @@ const DeliveryInformation = ({
   // không sài state selectedProvince làm dependency
   useEffect(() => {
     // if (!isModalOpen) return;
- 
+
     const provinceCode = userData?.address?.provinceCode;
 
     // load wards
@@ -220,7 +219,8 @@ const DeliveryInformation = ({
               <Radio value={PaymentMethod.VNPAY}>
                 <span className="payment-label">Thanh toán với VNPAY</span>
               </Radio>
-              <img style={{width: "72px"}}
+              <img
+                style={{ width: "72px" }}
                 src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg"
                 alt="bank"
                 className="payment-icon"

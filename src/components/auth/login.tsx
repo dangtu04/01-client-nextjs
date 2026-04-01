@@ -1,15 +1,24 @@
 "use client";
-import { Button, Col, Divider, Form, Input, message, notification, Row } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  message,
+  notification,
+  Row,
+} from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { authenticate, loginWithGoogle } from "@/utils/actions"; // ✅ import thêm
+import { authenticate, loginWithGoogle } from "@/utils/actions";
 import { useRouter } from "next/navigation";
 import ModalReactivate from "./modal.reactivate";
 import { useState } from "react";
 import ModalChangePassword from "./modal.change.password";
 import "./login.scss";
 
-// ✅ Google Icon SVG component
+// google Icon svg component
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" style={{ marginRight: 8 }}>
     <path
@@ -36,7 +45,7 @@ const Login = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [changePassword, setChangePassword] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false); // ✅ loading state
+  const [googleLoading, setGoogleLoading] = useState(false); // loading state
 
   const onFinish = async (values: any) => {
     const { email, password } = values;
@@ -54,11 +63,11 @@ const Login = () => {
       }
     } else {
       message.success("Đăng nhập thành công!");
-      router.push("/");
+      window.location.href = "/";
     }
   };
 
-  // ✅ Handler Google login
+  // Handler Google login
   const handleGoogleLogin = async () => {
     try {
       setGoogleLoading(true);
@@ -101,7 +110,9 @@ const Login = () => {
                 <Form.Item
                   label="Mật khẩu"
                   name="password"
-                  rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+                  rules={[
+                    { required: true, message: "Vui lòng nhập mật khẩu!" },
+                  ]}
                 >
                   <Input.Password />
                 </Form.Item>
@@ -128,7 +139,7 @@ const Login = () => {
                 </Form.Item>
               </Form>
 
-              {/* ✅ Divider + Google button */}
+              {/* Divider + Google button */}
               <Divider className="login-divider">hoặc</Divider>
 
               <Button

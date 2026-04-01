@@ -9,7 +9,7 @@ interface IProps {
 
 const ProductDetailImages = ({ listImages }: IProps) => {
   const moreImagesCount = listImages.length - 4;
-  
+
   return (
     <div className="product-detail-images">
       <Image.PreviewGroup items={listImages}>

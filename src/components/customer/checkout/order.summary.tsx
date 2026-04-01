@@ -4,6 +4,7 @@ import { Input, Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { ICartItem } from "@/types/models/cart.model";
 import PaginationLayout from "../layouts/pagination";
+import Link from "next/link";
 
 interface OrderSummaryProps {
   cartItems: ICartItem[];
@@ -82,9 +83,9 @@ const OrderSummary = ({
           <span className="total-price">{total.toLocaleString("vi-VN")}₫</span>
         </div>
 
-        <a href="#" className="back-link">
+        <Link href="cart" className="back-link">
           <LeftOutlined /> Quay về giỏ hàng
-        </a>
+        </Link>
       </div>
     </div>
   );

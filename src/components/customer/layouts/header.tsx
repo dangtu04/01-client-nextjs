@@ -14,7 +14,7 @@ import { menuData } from "@/utils/menu.data";
 import MenuVertical from "./menu.vertical";
 import Link from "next/link";
 import type { MenuProps } from "antd";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -26,6 +26,7 @@ interface CustomerHeaderProps {
 
 const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [searchValue, setSearchValue] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -37,6 +38,18 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+const handleCartClick = () => {
+    if (status === "loading") return; // tránh flicker
+
+    if (!session) {
+      alert("Vui lòng đăng nhập để xem giỏ hàng!");
+      return;
+    }
+
+    router.push("/cart");
+  };
+
 
   const handleSearch = () => {
     if (searchValue.trim()) {
@@ -53,7 +66,7 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
 
   const handleLogout = async () => {
     await signOut({ redirect: false });
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   const data: any = menuData;
@@ -127,6 +140,7 @@ const CustomerHeader = ({ totalQty, isAuthenticated }: CustomerHeaderProps) => {
               href={"/cart"}
               className="action-item"
               style={{ textDecoration: "none" }}
+              // onClick={handleCartClick}
             >
               <Badge count={totalQty} offset={[5, 0]}>
                 <ShoppingCartOutlined

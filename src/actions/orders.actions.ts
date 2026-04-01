@@ -21,7 +21,7 @@ export const handleCreateCODOrderAction = async (data: any) => {
       }
       return { success: true };
     }
-    console.log(">>>>> res: ", res);
+    // console.log(">>>>> res: ", res);
     return { success: false, message: res?.message };
   } catch (error) {}
 };

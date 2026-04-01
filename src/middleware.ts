@@ -6,7 +6,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
   const session = req.auth;
 
-  const publicRoutes = ["/", "/login", "/register", "/not-found", "/product", "/product/search"];
+  const publicRoutes = ["/", "/login", "/register", "/not-found", "/product", "/product/search", "/cart", "/order"];
 
   const isProductDetailRoute = pathname.startsWith("/product/");
   const isVerifyRoute = pathname.startsWith("/verify/"); 

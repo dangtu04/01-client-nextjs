@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { DeleteOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import "./cart.scss";
 import { ICartItem } from "@/types/models/cart.model";
 import CartItem from "./cart.item";
@@ -9,6 +9,8 @@ import PaginationLayout from "../layouts/pagination";
 import { useSearchParams } from "next/navigation";
 import { SHIPPING_CONFIG } from "@/utils/shipping";
 import Link from "next/link";
+import { useSession, signIn } from "next-auth/react";
+
 interface IProps {
   items: ICartItem[];
   meta?: {
@@ -17,29 +19,68 @@ interface IProps {
     pages: number;
     totals: number;
   };
-   totalPrice: number;
+  totalPrice: number;
 }
 
 const Cart = (props: IProps) => {
   const { items, meta, totalPrice } = props;
-
   const [isLoading, setIsLoading] = useState(false);
-
   const searchParams = useSearchParams();
+  const { data: session, status, update } = useSession();
 
   const pageKey = `${searchParams.get("current")}-${searchParams.get("pageSize")}`;
+
+  useEffect(() => {
+    update();
+  }, []);
+
 
   const formatPrice = (price: number) => {
     return price.toLocaleString("vi-VN") + "đ";
   };
 
-  // const subTotal = items.reduce((sum, item) => sum + item.subtotal, 0) || 0;
   const shipping =
     totalPrice >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD
       ? 0
       : SHIPPING_CONFIG.DEFAULT_FEE;
   const total = totalPrice + shipping;
 
+  // đang kiểm tra session
+  if (status === "loading") {
+    return (
+      <div className="cart-page">
+        <div className="cart-container">
+          <div className="empty-cart">
+            <p>Đang tải...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // chưa login
+  if (!session) {
+    return (
+      <div className="cart-page">
+        <div className="cart-container">
+          <div className="empty-cart">
+            <ShoppingCartOutlined style={{ fontSize: 80 }} />
+            <h2>Vui lòng đăng nhập</h2>
+            <p>Bạn cần đăng nhập để xem giỏ hàng</p>
+            <Link
+              href="/login"
+              className="btn-shopping"
+              style={{ textDecoration: "none" }}
+            >
+              Đăng nhập ngay
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // dã login nhưng giỏ hàng trống
   if (items.length === 0) {
     return (
       <div className="cart-page">
@@ -48,13 +89,16 @@ const Cart = (props: IProps) => {
             <ShoppingCartOutlined style={{ fontSize: 80 }} />
             <h2>Giỏ hàng trống</h2>
             <p>Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
-            <button className="btn-shopping">Tiếp tục mua sắm</button>
+            <Link href="/product">
+              <button className="btn-shopping">Tiếp tục mua sắm</button>
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
+  // dã login và có sản phẩm
   return (
     <div className="cart-page" key={pageKey}>
       <div className="cart-container">
@@ -88,11 +132,16 @@ const Cart = (props: IProps) => {
             </div>
 
             <Link href="/checkout">
-              <button className="btn-checkout" disabled={isLoading}>Thanh toán</button>
+              <button className="btn-checkout" disabled={isLoading}>
+                Thanh toán
+              </button>
             </Link>
 
             <div className="shipping-note">
-              <p>Miễn phí vận chuyển cho đơn hàng từ {formatPrice(SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD)}</p>
+              <p>
+                Miễn phí vận chuyển cho đơn hàng từ{" "}
+                {formatPrice(SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD)}
+              </p>
             </div>
 
             <Link href="/">
